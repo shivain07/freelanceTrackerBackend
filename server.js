@@ -14,7 +14,7 @@ import timeLogRoutes from './routes/timeLogs.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+const CLIENT_URL = process.env.CLIENT_URL;
 const configuredShutdownTimeout = Number(process.env.SHUTDOWN_TIMEOUT_MS);
 const SHUTDOWN_TIMEOUT_MS = Number.isSafeInteger(configuredShutdownTimeout) && configuredShutdownTimeout > 0
   ? configuredShutdownTimeout

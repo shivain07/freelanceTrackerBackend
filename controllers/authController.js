@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
 
 export const handleGoogleLogin = async (req, res, next) => {
   try {
