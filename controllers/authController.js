@@ -69,12 +69,14 @@ export const handleGoogleLogin = async (req, res, next) => {
     );
 
     // 4. Secure Production Cookie Option (HttpOnly protects against XSS)
-    res.cookie('token', appToken, {
+    const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // true in production (HTTPS)
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-    });
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    };
+
+    res.cookie('token', appToken, cookieOptions);
 
     return res.status(200).json({
       success: true,
@@ -92,7 +94,7 @@ export const handleLogout = (req, res, next) => {
     res.clearCookie('token', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax'
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
     });
 
     return res.status(200).json({

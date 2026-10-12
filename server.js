@@ -60,6 +60,23 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+const trustedOrigin = new URL(CLIENT_URL).origin;
+
+app.use('/api', (req, res, next) => {
+  if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) {
+    return next();
+  }
+
+  if (req.get('Origin') !== trustedOrigin) {
+    return res.status(403).json({
+      success: false,
+      error: 'Untrusted request origin.',
+    });
+  }
+
+  next();
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/projects', projectRoutes);
