@@ -1,0 +1,66 @@
+# ==========================================
+# 1. Security & Environment Variables
+# ==========================================
+# Never commit credentials, API keys, or local configuration files
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Always track the template file so your team knows what variables are needed
+!.env.example
+
+# ==========================================
+# 2. Operating System System Files
+# ==========================================
+# macOS clutter
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows clutter
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+desktop.ini
+
+# ==========================================
+# 3. Code Editors and IDEs
+# ==========================================
+# Visual Studio Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# IntelliJ / JetBrains
+.idea/
+*.iml
+
+# Other common text editors
+*.swp
+*.swo
+*~
+
+# ==========================================
+# 4. Logs and Diagnostics
+# ==========================================
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+
+# --- Node.js / Frontend ---
+node_modules/
+dist/
+build/
+.next/
+
+
+# --- Docker ---
+# .dockerignore
+
+#  db file
+.sql
