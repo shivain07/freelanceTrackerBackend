@@ -14,18 +14,18 @@ import timeLogRoutes from './routes/timeLogs.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const CLIENT_URL = process.env.CLIENT_URL;
 const configuredShutdownTimeout = Number(process.env.SHUTDOWN_TIMEOUT_MS);
 const SHUTDOWN_TIMEOUT_MS = Number.isSafeInteger(configuredShutdownTimeout) && configuredShutdownTimeout > 0
-  ? configuredShutdownTimeout
-  : 10_000;
+? configuredShutdownTimeout
+: 10_000;
 const isProduction = process.env.NODE_ENV === 'production';
+const CLIENT_URL = isProduction ?process.env.CLIENT_URL:"http://localhost:5173";
 
 app.disable('x-powered-by');
 
 app.use(
   cors({
-    origin: CLIENT_URL,
+    origin: isProduction ? CLIENT_URL :"http://localhost:5173",
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']

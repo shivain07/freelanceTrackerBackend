@@ -7,7 +7,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const handleGoogleLogin = async (req, res, next) => {
   try {
-    const { token } = req.body;
+    const { token, authMode } = req.body;
     if (!token) {
       return res.status(400).json({ error: 'Google token is missing' });
     }
@@ -68,7 +68,20 @@ export const handleGoogleLogin = async (req, res, next) => {
       { expiresIn: '7d' }
     );
 
-    // 4. Secure Production Cookie Option (HttpOnly protects against XSS)
+    const userPayload = { id: user.id, name, email, avatar_url };
+
+    // iOS blocks the cross-site auth cookie, so those clients receive the JWT
+    // in the body and send it back as an Authorization bearer header.
+    if (authMode === 'bearer') {
+      return res.status(200).json({
+        success: true,
+        message: 'Authentication successful',
+        user: userPayload,
+        token: appToken,
+      });
+    }
+
+    // HttpOnly cookie keeps the JWT out of JavaScript on browsers that accept it.
     const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -81,7 +94,7 @@ export const handleGoogleLogin = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: 'Authentication successful',
-      user: { id: user.id, name, email, avatar_url }
+      user: userPayload,
     });
 
   } catch (error) {
